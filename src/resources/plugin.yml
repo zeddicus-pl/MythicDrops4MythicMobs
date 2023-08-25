@@ -2,3 +2,4 @@ name: MythicDropsForMythicMobs
 main: com.github.zeddicuspl.md4mm.MythicDropsForMythicMobsPlugin
 version: 1.0
 depend: [MythicMobs,MythicDrops,WorldGuard]
+api-version: '1.20'
