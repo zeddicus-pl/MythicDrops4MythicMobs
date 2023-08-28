@@ -58,7 +58,7 @@ name_of_mob:
     rare: 20
     gems: 10
     legendary: 5
-    customItem: 1
+    customItems: 1
   # Number of times the drop is calculated and dropped upon mob death.
   # You can also use format of x-y (like: 1-3) and then the number of droped items will vary between 1 to 3 items
   passes: 5
