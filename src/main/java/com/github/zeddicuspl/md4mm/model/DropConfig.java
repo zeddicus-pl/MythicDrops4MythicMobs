@@ -18,14 +18,16 @@ public class DropConfig implements ConfigurationSerializable {
     private Map<String, BigDecimal> tiers;
     private String passes;
     private String template;
+    private Map<String, BigDecimal> extraDrops;
 
     public DropConfig() {
     }
-    public DropConfig(String mobName, Map<String, BigDecimal> tiers, String passes, String template) {
+    public DropConfig(String mobName, Map<String, BigDecimal> tiers, String passes, String template, Map<String, BigDecimal> extra) {
         this.mobName = mobName;
         this.tiers = tiers;
         this.passes = passes;
         this.template = template;
+        this.extraDrops = extra;
     }
 
     @NotNull
@@ -36,22 +38,33 @@ public class DropConfig implements ConfigurationSerializable {
         args.put("tiers", tiers);
         args.put("passes", passes);
         args.put("template", template);
+        args.put("extraDrops", extraDrops);
         return args;
     }
 
     public static DropConfig deserialize(String mobName, ConfigurationSection dropConfig) {
-        ConfigurationSection tiersObj = dropConfig.getConfigurationSection("tiers");
-        if (tiersObj == null) return null;
 
-        Map<String, BigDecimal> tiersEntries = tiersObj.getValues(false).entrySet().stream().collect(
-                Collectors.toMap(Map.Entry::getKey, e -> new BigDecimal(String.valueOf(e.getValue())))
-        );
+        Map<String, BigDecimal> tiersEntries = readMap(dropConfig.getConfigurationSection("tiers"));
+        Map<String, BigDecimal> extraEntries = readMap(dropConfig.getConfigurationSection("extraDrops"));
 
         return new DropConfig(
                 mobName,
                 tiersEntries,
                 dropConfig.getString("passes"),
-                dropConfig.getString("template")
+                dropConfig.getString("template"),
+                extraEntries
         );
+    }
+
+    private static Map<String, BigDecimal> readMap(ConfigurationSection section) {
+        Map<String, BigDecimal> entries;
+        if (section != null) {
+            entries = section.getValues(false).entrySet().stream().collect(
+                    Collectors.toMap(Map.Entry::getKey, e -> new BigDecimal(String.valueOf(e.getValue())))
+            );
+        } else {
+            entries = new HashMap<>();
+        }
+        return entries;
     }
 }

@@ -1,0 +1,77 @@
+# correct base class
+BASE_ZOMBIE:
+  tiers:
+    foo: 50
+    bar: 50
+  passes: 1
+
+# template inheriting a template
+BASE_WEIRD_ZOMBIE:
+  template: BASE_ZOMBIE
+  tiers:
+    abc: 123
+
+# empty base class
+BASE_FOO:
+
+# corrupted base class
+BASE_FAIRY:
+  tiers: 123
+  passes: aaa
+  template:
+
+# correct entry
+MY_ZOMBIE:
+  template: BASE_ZOMBIE
+  passes: 5
+
+# correct entry using inheritance from two templates
+MY_WEIRD_ZOMBIE:
+  template: BASE_WEIRD_ZOMBIE
+  passes: 6
+
+# multiple templates inheritance in one line
+COMPLICATED_ZOMBIE:
+  template: BASE_ZOMBIE, BASE_WEIRD_ZOMBIE
+  tiers:
+    aha: 11
+
+# mob inheriting from empty template
+ANOTHER_ZOMBIE:
+  template: BASE_FOO
+  tiers:
+    foo: 10
+    bar: 20
+
+# mob inheriting from corrupted template
+YET_ANOTHER_ZOMBIE:
+  template: BASE_FAIRY
+
+# mob inheriting from corrupted template but overwriting values
+NICE_ZOMBIE:
+  template: BASE_FAIRY
+  tiers:
+    foo: 20
+    bar: 30
+  passes: 7
+
+# using non-existing template
+SHAKY_SKELETON:
+  template: NON_EXISTING_TEMPLATE
+  tiers:
+    blah: 30
+    haha: 20
+    huh: 10
+  passes: 1-3
+
+# extra drop
+GEMS_AND_EXTRAS:
+  tiers:
+    common: 30
+    gems: 5
+    identityBook: 10
+    socketExtender: 5
+    customItem: 1
+  passes: 4
+  extraDrop:
+    - superDuperSword

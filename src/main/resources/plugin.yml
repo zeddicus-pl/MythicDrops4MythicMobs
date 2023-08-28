@@ -3,3 +3,9 @@ main: com.github.zeddicuspl.md4mm.MythicDropsForMythicMobsPlugin
 version: 1.0
 depend: [MythicMobs,MythicDrops,WorldGuard]
 api-version: '1.20'
+
+commands:
+  md4mm:
+    description: Reload MythidDrops4MythicMobs config
+    usage: /md4mm reload
+    permission: md4mm.reload

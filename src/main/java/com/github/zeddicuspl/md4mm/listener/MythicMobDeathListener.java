@@ -20,10 +20,11 @@ import java.util.logging.Logger;
 
 public class MythicMobDeathListener implements Listener {
     private final Logger log;
-    private final DropCalculator dropCalculator = new DropCalculator();
+    private final DropCalculator dropCalculator;
 
     public MythicMobDeathListener(MythicDropsForMythicMobsPlugin plugin) {
         log = plugin.getLogger();
+        dropCalculator = new DropCalculator(log);
     }
 
     @EventHandler
@@ -31,22 +32,13 @@ public class MythicMobDeathListener implements Listener {
         if (shouldAbortHandlingDeathEvent(event)) {
             return;
         }
+        log.info("MythicMobDeathEvent called for " + event.getMob().getMobType());
 
-        DropConfig dropConfigForMob = getDropConfigForMob(event.getMob());
-
-        log.info("MythicMobDeathEvent called for " + event.getMob());
-        // Let's get a tier by name
-        Tier legendaryTier = MythicDropsApi.getMythicDrops().getTierManager().getByName("legendary");
-        if (legendaryTier == null) {
-            throw new RuntimeException("We don't have a tier named 'legendary'");
-        }
-        // Let's make an item from our tier
-        ItemStack legendaryItem = MythicDropsApi.getMythicDrops().getProductionLine().getTieredItemFactory().toItemStack(legendaryTier);
-        if (legendaryItem == null) {
-            throw new RuntimeException("We weren't able to make an item from the 'legendary' tier");
-        }
+        List<ItemStack> items = dropCalculator.getDropForEntityAndLocation(event.getMob());
         List<ItemStack> drops = event.getDrops();
-        drops.add(legendaryItem);
+        if (items != null && !items.isEmpty()) {
+            drops.addAll(items);
+        }
         event.setDrops(drops);
     }
 
@@ -56,10 +48,5 @@ public class MythicMobDeathListener implements Listener {
         return !(killer instanceof Player)
             || entity.getLastDamageCause() == null
             || entity.getLastDamageCause().isCancelled();
-    }
-
-    private DropConfig getDropConfigForMob(ActiveMob mob) {
-        Log.info("Calculating drop table for " + mob.getMobType());
-        return dropCalculator.getDropConfigForMobByName(mob.getMobType());
     }
 }
