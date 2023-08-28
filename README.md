@@ -9,6 +9,8 @@ Depends on:
 This plugin receives MythicMob's "death" event, uses its configuration to determine what tiers of items (and gems, identification books, socket extenders, custom items) can drop from that mob.
 It also takes into account WorldGuard regions - you can set a number (positive or negative) which will influence the drop based on the region player is in.
 
+This is my first MC plugin, so please forgive me the code quality :)
+
 ## Config files
 Plugin will create the config.yml file, and `drops` folder in `plugins/MythicDropsForMythicMobs`.
 
